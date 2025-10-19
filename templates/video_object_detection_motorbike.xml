@@ -1,0 +1,30 @@
+<View>
+  <Header value="摩托车第一人称视角 - 目标检测标注"/>
+  
+  <Video name="video" value="$video" sync="audio" 
+         framerate="25.0"
+         height="600px"/>
+  
+  <VideoRectangle name="box" toName="video"/>
+  
+  <Labels name="videoLabels" toName="video">
+    <Label value="行人" background="#FF7043"/>
+    <Label value="车辆" background="#42A5F5"/>
+    <Label value="路标" background="#66BB6A"/>
+    <Label value="施工标志" background="#FFD54F"/>
+    <Label value="非机动车" background="#AB47BC"/>
+    <Label value="障碍物" background="#FF6F00"/>
+  </Labels>
+  
+  <Choices name="video_quality" toName="video" choice="single" showInline="true">
+    <Header value="视频质量评估"/>
+    <Choice value="清晰" />
+    <Choice value="一般" />
+    <Choice value="模糊" />
+  </Choices>
+  
+  <TextArea name="notes" toName="video" 
+            placeholder="备注：如遮挡情况、特殊场景等..."
+            rows="2"
+            editable="true"/>
+</View>

@@ -1,0 +1,28 @@
+<View>
+  <Header value="视频简单分类"/>
+  
+  <Video name="video" value="$video" sync="audio" 
+         framerate="25.0"
+         height="600px"/>
+  
+  <Choices name="video_category" toName="video" choice="single" showInline="true">
+    <Header value="视频类别"/>
+    <Choice value="正常行驶" />
+    <Choice value="危险驾驶" />
+    <Choice value="交通拥堵" />
+    <Choice value="交通事故" />
+    <Choice value="施工路段" />
+    <Choice value="恶劣天气" />
+    <Choice value="其他" />
+  </Choices>
+  
+  <Rating name="risk_level" toName="video" maxRating="5" icon="star" size="large" showInline="true">
+    <Header value="风险等级（1-5星）"/>
+  </Rating>
+  
+  <TextArea name="description" toName="video" 
+            placeholder="描述视频内容和关键事件..."
+            rows="4"
+            editable="true"
+            required="true"/>
+</View>

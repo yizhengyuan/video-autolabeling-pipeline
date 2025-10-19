@@ -1,0 +1,60 @@
+<View>
+  <Header value="视频目标跟踪（带关键点和属性标注）"/>
+  
+  <Video name="video" value="$video" sync="audio" 
+         framerate="25.0"
+         height="600px"
+         zoom="true"
+         brightnessControl="true"
+         contrastControl="true"/>
+  
+  <!-- 目标检测框 -->
+  <VideoRectangle name="box" toName="video"/>
+  
+  <Labels name="videoLabels" toName="video">
+    <Label value="行人" background="#FF7043"/>
+    <Label value="汽车" background="#42A5F5"/>
+    <Label value="摩托车" background="#AB47BC"/>
+    <Label value="自行车" background="#66BB6A"/>
+    <Label value="交通标志" background="#FFD54F"/>
+    <Label value="交通信号灯" background="#26C6DA"/>
+    <Label value="施工区域" background="#FF6F00"/>
+    <Label value="其他" background="#8D6E63"/>
+  </Labels>
+  
+  <!-- 目标属性 -->
+  <Choices name="object_attributes" toName="box" choice="multiple" showInline="false">
+    <Header value="目标属性"/>
+    <Choice value="静止" />
+    <Choice value="移动中" />
+    <Choice value="部分遮挡" />
+    <Choice value="严重遮挡" />
+    <Choice value="模糊" />
+    <Choice value="截断" />
+  </Choices>
+  
+  <!-- 场景分类 -->
+  <Choices name="scene_type" toName="video" choice="single" showInline="true">
+    <Header value="场景类型"/>
+    <Choice value="城市道路" />
+    <Choice value="高速公路" />
+    <Choice value="乡村道路" />
+    <Choice value="施工区域" />
+    <Choice value="停车场" />
+  </Choices>
+  
+  <!-- 天气条件 -->
+  <Choices name="weather" toName="video" choice="single" showInline="true">
+    <Header value="天气条件"/>
+    <Choice value="晴天" />
+    <Choice value="阴天" />
+    <Choice value="雨天" />
+    <Choice value="雾天" />
+    <Choice value="夜间" />
+  </Choices>
+  
+  <TextArea name="notes" toName="video" 
+            placeholder="特殊情况说明..."
+            rows="3"
+            editable="true"/>
+</View>

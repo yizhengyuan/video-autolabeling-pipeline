@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Label Studio
+.label-studio/
+label_studio.sqlite3
+
+# Temporary files
+temp_frames/
+*.tmp
+*.log
+
+# Large data files
+data/*/
+*.mp4
+*.avi
+*.mov
+*.mkv
+
+# Generated labels and outputs
+labels/*
+!labels/README.md
+
+# Image and JSON outputs
+*.jpg
+*.png
+*.json
+
+# Cache
+.cache/
+*.pyc
+
+
