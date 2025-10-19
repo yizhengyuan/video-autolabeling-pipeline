@@ -102,34 +102,6 @@
             color: var(--primary);
         }
 
-        /* Stats Section */
-        .stats {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 50px;
-            padding: 40px 20px;
-            background: var(--light);
-            flex-wrap: wrap;
-        }
-
-        .stat-card {
-            text-align: center;
-            padding: 15px 25px;
-        }
-
-        .stat-card .number {
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 5px;
-        }
-
-        .stat-card .label {
-            font-size: 0.95rem;
-            color: #6b7280;
-        }
-
         /* Features Section */
         .features {
             padding: 80px 20px;
@@ -222,9 +194,12 @@
 
         .model-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 30px;
             margin-top: 40px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .model-card {
@@ -286,8 +261,10 @@
 
         .use-case-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 25px;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
         .use-case {
@@ -359,7 +336,11 @@
                 font-size: 2rem;
             }
 
-            .stats {
+            .model-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .use-case-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -385,28 +366,6 @@
             </div>
         </div>
     </header>
-
-    <!-- Stats -->
-    <section class="stats">
-        <div class="container">
-            <div class="stat-card">
-                <div class="number">80%+</div>
-                <div class="label">Time Saved</div>
-            </div>
-            <div class="stat-card">
-                <div class="number">95%</div>
-                <div class="label">Accuracy (Claude)</div>
-            </div>
-            <div class="stat-card">
-                <div class="number">3</div>
-                <div class="label">MLLM Providers</div>
-            </div>
-            <div class="stat-card">
-                <div class="number">Free</div>
-                <div class="label">YOLO Alternative</div>
-            </div>
-        </div>
-    </section>
 
     <!-- Features -->
     <section class="features">
