@@ -1,5 +1,7 @@
 # MLLM Auto-Labeling for Images & Videos
 
+> 🌐 **[View Project Website](https://yizhengyuan.github.io/video-autolabeling-pipeline/)** | 📚 **[Documentation](QUICKSTART.md)** | 💬 **[Issues](https://github.com/yizhengyuan/video-autolabeling-pipeline/issues)**
+
 **Leverage Multimodal Large Language Models (MLLMs) to automatically label your image and video datasets.**
 
 Generate high-quality bounding box annotations using state-of-the-art vision-language models like GPT-4V, Claude 3.5 Sonnet, and Qwen-VL. Save 80%+ annotation time while maintaining 85-95% accuracy.

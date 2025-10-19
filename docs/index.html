@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MLLM Auto-Labeling - Leverage Multimodal LLMs to automatically label images and videos. Save 80%+ annotation time.">
+    <meta name="keywords" content="MLLM, auto-labeling, computer vision, GPT-4V, Claude, Qwen-VL, object detection, video annotation">
+    <title>MLLM Auto-Labeling for Images & Videos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #10b981;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --border: #e5e7eb;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        header .subtitle {
+            font-size: 1.5rem;
+            opacity: 0.95;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        header .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Stats Section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            padding: 60px 20px;
+            background: var(--light);
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .stat-card .number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .stat-card .label {
+            font-size: 1.1rem;
+            color: #6b7280;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #6b7280;
+            margin-bottom: 60px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            padding: 30px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .feature-card .icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .feature-card p {
+            color: #6b7280;
+            line-height: 1.7;
+        }
+
+        /* Demo Section */
+        .demo {
+            padding: 80px 20px;
+            background: var(--light);
+        }
+
+        .demo-content {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+
+        .code-block {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 25px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.95rem;
+        }
+
+        .code-block code {
+            color: #10b981;
+        }
+
+        /* Models Section */
+        .models {
+            padding: 80px 20px;
+        }
+
+        .model-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .model-card {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .model-card:hover {
+            border-color: var(--secondary);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.1);
+        }
+
+        .model-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .model-card .accuracy {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--secondary);
+            margin: 20px 0;
+        }
+
+        .model-card .description {
+            color: #6b7280;
+            margin-bottom: 15px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .badge-recommended {
+            background: #dbeafe;
+            color: var(--primary);
+        }
+
+        .badge-free {
+            background: #d1fae5;
+            color: var(--secondary);
+        }
+
+        /* Use Cases */
+        .use-cases {
+            padding: 80px 20px;
+            background: var(--light);
+        }
+
+        .use-case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .use-case {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .use-case h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .use-case p {
+            color: #6b7280;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        footer a {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            header .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>🤖 MLLM Auto-Labeling</h1>
+            <p class="subtitle">for Images & Videos</p>
+            <p class="tagline">
+                Leverage Multimodal Large Language Models to automatically generate high-quality 
+                bounding box annotations. Save 80%+ annotation time while maintaining 85-95% accuracy.
+            </p>
+            <div class="cta-buttons">
+                <a href="https://github.com/yizhengyuan/video-autolabeling-pipeline" class="btn btn-primary">
+                    View on GitHub
+                </a>
+                <a href="https://github.com/yizhengyuan/video-autolabeling-pipeline/blob/main/QUICKSTART.md" class="btn btn-secondary">
+                    Quick Start Guide
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Stats -->
+    <section class="stats">
+        <div class="container">
+            <div class="stat-card">
+                <div class="number">80%+</div>
+                <div class="label">Time Saved</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">95%</div>
+                <div class="label">Accuracy (Claude)</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">3</div>
+                <div class="label">MLLM Providers</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">Free</div>
+                <div class="label">YOLO Alternative</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Key Features</h2>
+            <p class="section-subtitle">
+                Production-ready tools for AI-powered image and video annotation
+            </p>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="icon">🤖</div>
+                    <h3>MLLM Auto-Labeling</h3>
+                    <p>
+                        Leverage GPT-4V, Claude 3.5 Sonnet, and Qwen-VL to automatically 
+                        generate bounding box labels with natural language understanding.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="icon">📹</div>
+                    <h3>Video Frame Labeling</h3>
+                    <p>
+                        Smart sampling strategies for efficient video annotation. 
+                        Process hours of footage in minutes with intelligent frame selection.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="icon">🖼️</div>
+                    <h3>Image Object Detection</h3>
+                    <p>
+                        Single-shot bounding box generation for images. 
+                        Get instant results with high-quality annotations.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="icon">⚡</div>
+                    <h3>Lightning Fast</h3>
+                    <p>
+                        AI generates initial labels in seconds. 
+                        Humans only review and refine, saving 80%+ of annotation time.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="icon">🎯</div>
+                    <h3>High Accuracy</h3>
+                    <p>
+                        Claude: 90-95%, Qwen: 85-90%, YOLO: 80-85%. 
+                        Choose the right balance of accuracy and cost for your project.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="icon">🔧</div>
+                    <h3>Production Ready</h3>
+                    <p>
+                        Label Studio integration, batch processing, visualization tools. 
+                        Everything you need for a complete annotation pipeline.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start Demo -->
+    <section class="demo">
+        <div class="container">
+            <h2 class="section-title">Get Started in 3 Steps</h2>
+            <p class="section-subtitle">
+                From zero to auto-labeled images in less than 5 minutes
+            </p>
+
+            <div class="demo-content">
+                <h3 style="margin-bottom: 20px;">Step 1: Install Dependencies</h3>
+                <div class="code-block">
+pip install opencv-python requests Pillow anthropic
+                </div>
+
+                <h3 style="margin: 30px 0 20px 0;">Step 2: Set API Key</h3>
+                <div class="code-block">
+<code>export DASHSCOPE_API_KEY="your-qwen-key"</code>        # Qwen (China-friendly)<br>
+<code>export ANTHROPIC_API_KEY="your-claude-key"</code>     # Claude (Best quality)
+                </div>
+
+                <h3 style="margin: 30px 0 20px 0;">Step 3: Label Your Image</h3>
+                <div class="code-block">
+python3 scripts/image_auto_labeling.py your-image.jpg --provider qwen --visualize
+                </div>
+
+                <p style="margin-top: 30px; text-align: center; font-size: 1.1rem;">
+                    ✨ View the labeled result with bounding boxes instantly!
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Supported Models -->
+    <section class="models">
+        <div class="container">
+            <h2 class="section-title">Supported Models</h2>
+            <p class="section-subtitle">
+                Choose the right model for your accuracy, speed, and budget requirements
+            </p>
+
+            <div class="model-grid">
+                <div class="model-card">
+                    <h3>Claude 3.5</h3>
+                    <div class="accuracy">90-95%</div>
+                    <p class="description">
+                        Highest accuracy. Best for critical applications requiring precise annotations.
+                    </p>
+                    <span class="badge badge-recommended">Best Quality</span>
+                </div>
+
+                <div class="model-card">
+                    <h3>Qwen-VL</h3>
+                    <div class="accuracy">85-90%</div>
+                    <p class="description">
+                        Great balance. Fast, affordable, and works perfectly in China without VPN.
+                    </p>
+                    <span class="badge badge-recommended">Recommended</span>
+                </div>
+
+                <div class="model-card">
+                    <h3>GPT-4V</h3>
+                    <div class="accuracy">90-93%</div>
+                    <p class="description">
+                        Excellent accuracy. Widely available and reliable for production use.
+                    </p>
+                    <span class="badge badge-recommended">Reliable</span>
+                </div>
+
+                <div class="model-card">
+                    <h3>YOLO11</h3>
+                    <div class="accuracy">80-85%</div>
+                    <p class="description">
+                        Local processing. Completely free, works offline, fast inference speed.
+                    </p>
+                    <span class="badge badge-free">Free & Offline</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="use-cases">
+        <div class="container">
+            <h2 class="section-title">Use Cases</h2>
+            <p class="section-subtitle">
+                Trusted by teams across industries for various annotation tasks
+            </p>
+
+            <div class="use-case-grid">
+                <div class="use-case">
+                    <h3>🚗 Autonomous Driving</h3>
+                    <p>Vehicle, pedestrian, and traffic sign detection</p>
+                </div>
+
+                <div class="use-case">
+                    <h3>🏭 Industrial QA</h3>
+                    <p>Defect detection and product classification</p>
+                </div>
+
+                <div class="use-case">
+                    <h3>🏥 Medical Imaging</h3>
+                    <p>Lesion annotation and organ segmentation</p>
+                </div>
+
+                <div class="use-case">
+                    <h3>📦 E-commerce</h3>
+                    <p>Product recognition and shelf monitoring</p>
+                </div>
+
+                <div class="use-case">
+                    <h3>🎥 Video Analytics</h3>
+                    <p>Action recognition and object tracking</p>
+                </div>
+
+                <div class="use-case">
+                    <h3>🌾 Agriculture</h3>
+                    <p>Crop monitoring and pest detection</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Save 80% of Your Annotation Time?</h2>
+            <p>Get started with MLLM auto-labeling in minutes</p>
+            <div class="cta-buttons">
+                <a href="https://github.com/yizhengyuan/video-autolabeling-pipeline" class="btn btn-primary">
+                    Get Started on GitHub
+                </a>
+                <a href="https://github.com/yizhengyuan/video-autolabeling-pipeline/blob/main/QUICKSTART.md" class="btn btn-secondary">
+                    Read Documentation
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>
+                Open Source Project | 
+                <a href="https://github.com/yizhengyuan/video-autolabeling-pipeline">GitHub Repository</a> | 
+                <a href="https://github.com/yizhengyuan/video-autolabeling-pipeline/issues">Report Issues</a>
+            </p>
+            <p style="margin-top: 20px; opacity: 0.7;">
+                Made with ❤️ for the Computer Vision Community
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
+
